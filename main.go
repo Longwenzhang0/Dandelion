@@ -4,6 +4,7 @@ import (
 	"Dandelion/dao/mysql"
 	"Dandelion/dao/redis"
 	"Dandelion/logger"
+	"Dandelion/pkg/snowflake"
 	"Dandelion/routes"
 	"Dandelion/settings"
 	"context"
@@ -14,8 +15,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/spf13/viper"
 
 	"go.uber.org/zap"
 )
@@ -57,14 +56,23 @@ func main() {
 		return
 	}
 	defer redis.Close()
-	// 5. 注册路由
-	r := routes.Setup()
+	fmt.Println(settings.Conf.Name)
+	fmt.Println(settings.Conf.StartTime)
 	fmt.Println(settings.Conf.RedisConfig)
 	fmt.Println(settings.Conf.MySQLConfig)
 	fmt.Println(settings.Conf.LogConfig)
-	// 6. 启动服务（优雅关机）
+
+	// 5. 初始化snowflake算法
+	if err := snowflake.Init(settings.Conf.StartTime, settings.Conf.MachineID); err != nil {
+		fmt.Printf("Init Snowflake failed, err:%v\n", err)
+		return
+	}
+	// 6. 注册路由
+	r := routes.Setup()
+
+	// 7. 启动服务（优雅关机）
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", viper.GetInt("app.port")),
+		Addr:    fmt.Sprintf(":%d", settings.Conf.Port),
 		Handler: r,
 	}
 

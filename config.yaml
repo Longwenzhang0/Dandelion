@@ -1,14 +1,13 @@
-app:
-  name: "web_app"
-  mode: "dev"
-  port: 8082
-  version: "v0.0.1"
-  start_time: "2024-12-24"
-  machine_id: 1
+name: "Dandelion"
+mode: "dev"
+port: 8082
+version: "v0.0.1"
+start_time: "2024-12-24"
+machine_id: 1
 
 log:
   level: "debug"
-  filename: "web_app.log"
+  filename: "Dandelion.log"
   max_size: 200
   max_age: 30
   max_backups: 7
@@ -18,7 +17,7 @@ mysql:
   port: 3306
   user: "root"
   password: "root"
-  dbname: "sql_demo"
+  dbname: "dandelion"
   max_open_conns: 200
   max_idle_conns: 50
 
