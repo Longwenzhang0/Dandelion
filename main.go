@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Dandelion/controller"
 	"Dandelion/dao/mysql"
 	"Dandelion/dao/redis"
 	"Dandelion/logger"
@@ -67,10 +68,15 @@ func main() {
 		fmt.Printf("Init Snowflake failed, err:%v\n", err)
 		return
 	}
-	// 6. 注册路由
+	// 6. 初始化校验器validator的翻译器
+	if err := controller.InitTrans("zh"); err != nil {
+		fmt.Printf("Init validator translator failed, err:%v\n", err)
+		return
+	}
+	// 7. 注册路由
 	r := routes.SetupRouter()
 
-	// 7. 启动服务（优雅关机）
+	// 8. 启动服务（优雅关机）
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", settings.Conf.Port),
 		Handler: r,
