@@ -9,11 +9,20 @@ import (
 // LOGIC层 用于存放业务逻辑的代码
 
 // SignUp 注册用户
-func SignUp(p *models.ParamSignUp) {
-	// 1. 判断用户是否存在
-	mysql.QueryUserByUsername()
+func SignUp(p *models.ParamSignUp) (err error) {
+	// 1. 判断用户是否存在；返回值是err，包含查询出错和已存在的两种情况
+	if err := mysql.CheckUserExist(p.Username); err != nil {
+		return err
+	}
 	// 2. 生成uid
-	snowflake.GenID()
+	userID := snowflake.GenID()
+	// 构造一个Users实例
+	user := &models.User{
+		UserID:   userID,
+		Username: p.Username,
+		Password: p.Password,
+	}
 	// 3. 保存到数据库
-	mysql.InsertUser()
+	err = mysql.InsertUser(user)
+	return
 }

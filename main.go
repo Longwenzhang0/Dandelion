@@ -49,7 +49,7 @@ func main() {
 		return
 	}
 	// 初始化完成之后关闭mysql
-	mysql.Close()
+	defer mysql.Close()
 
 	// 4. 初始化Redis连接
 	if err := redis.Init(settings.Conf.RedisConfig); err != nil {
