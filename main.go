@@ -35,7 +35,7 @@ func main() {
 		return
 	}
 	// 2. 初始化日志
-	if err := logger.Init(settings.Conf.LogConfig); err != nil {
+	if err := logger.Init(settings.Conf.LogConfig, settings.Conf.Mode); err != nil {
 		fmt.Printf("Init logger failed, err:%v\n", err)
 		return
 	}
@@ -74,7 +74,7 @@ func main() {
 		return
 	}
 	// 7. 注册路由
-	r := routes.SetupRouter()
+	r := routes.SetupRouter(settings.Conf.Mode)
 
 	// 8. 启动服务（优雅关机）
 	srv := &http.Server{

@@ -3,6 +3,7 @@ package mysql
 import (
 	"Dandelion/models"
 	"crypto/md5"
+	"database/sql"
 	"encoding/hex"
 	"errors"
 )
@@ -42,5 +43,25 @@ func encryptPassword(oPassword string) string {
 	sum := h.Sum([]byte(oPassword))
 
 	return hex.EncodeToString(sum)
+}
 
+// Login 登录
+func Login(user *models.User) (err error) {
+	// 保存明文密码
+	oPassword := user.Password
+	sqlStr := `select user_id,username,password from user where username = ?`
+	err = db.Get(user, sqlStr, user.Username)
+	// 两种错误，一种是用户不存在，一种是查询失败
+	if err == sql.ErrNoRows {
+		return errors.New("用户不存在")
+	}
+	if err != nil {
+		return err
+	}
+	// 如果查询成功，则判断返回的密码；
+	password := encryptPassword(oPassword)
+	if password != user.Password {
+		return errors.New("密码错误")
+	}
+	return
 }
