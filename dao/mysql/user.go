@@ -12,6 +12,12 @@ import (
 
 const secret = "longwenzhang0"
 
+var (
+	ErrorUserExist       = errors.New("用户已存在")
+	ErrorUserNotExist    = errors.New("用户不存在")
+	ErrorInvalidPassword = errors.New("密码错误")
+)
+
 // CheckUserExist 查询指定用户名的用户是否存在
 func CheckUserExist(username string) (err error) {
 	sqlStr := `select count(user_id) from user where username = ?`
@@ -20,7 +26,7 @@ func CheckUserExist(username string) (err error) {
 		return err
 	}
 	if count > 0 {
-		return errors.New("用户已存在")
+		return ErrorUserExist
 	}
 	return
 }
@@ -53,7 +59,7 @@ func Login(user *models.User) (err error) {
 	err = db.Get(user, sqlStr, user.Username)
 	// 两种错误，一种是用户不存在，一种是查询失败
 	if err == sql.ErrNoRows {
-		return errors.New("用户不存在")
+		return ErrorUserNotExist
 	}
 	if err != nil {
 		return err
@@ -61,7 +67,7 @@ func Login(user *models.User) (err error) {
 	// 如果查询成功，则判断返回的密码；
 	password := encryptPassword(oPassword)
 	if password != user.Password {
-		return errors.New("密码错误")
+		return ErrorInvalidPassword
 	}
 	return
 }
