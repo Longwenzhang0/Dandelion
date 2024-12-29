@@ -10,6 +10,7 @@ import (
 
 // DAO层 把每一步数据库的操作都封装成函数，等待LOGIC层按需求调用
 
+// 密钥
 const secret = "longwenzhang0"
 
 var (

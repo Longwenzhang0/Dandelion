@@ -3,6 +3,7 @@ package logic
 import (
 	"Dandelion/dao/mysql"
 	"Dandelion/models"
+	"Dandelion/pkg/jwt"
 	"Dandelion/pkg/snowflake"
 )
 
@@ -28,13 +29,17 @@ func SignUp(p *models.ParamSignUp) (err error) {
 }
 
 // Login 用户登录
-func Login(p *models.ParamLogin) (err error) {
+func Login(p *models.ParamLogin) (token string, err error) {
 	// 构造User实例
 	user := &models.User{
 		UserID:   0,
 		Username: p.Username,
 		Password: p.Password,
 	}
-	err = mysql.Login(user)
-	return
+	// user为指针，如果登录校验通过，可以在此处生成token
+	if err := mysql.Login(user); err != nil {
+		return "", err
+	}
+	// 生成jwt token
+	return jwt.GenToken(user.UserID, user.Username)
 }
