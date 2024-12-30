@@ -16,20 +16,23 @@ func SetupRouter(mode string) *gin.Engine {
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
-	r.GET("/", func(c *gin.Context) {
+	v1 := r.Group("/api/v1")
+
+	v1.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})
 
 	// 注册业务路由
-	r.POST("/signup", controller.SignUpHandler)
-
-	r.GET("/ping", middlewares.JWTAuthMiddleware(), func(c *gin.Context) {
-		// 登录才可以访问，判断请求头jwt token是否有效
-		c.String(http.StatusOK, "pong!")
-	})
-
+	v1.POST("/signup", controller.SignUpHandler)
 	// 登录业务路由
-	r.POST("/login", controller.LoginHandler)
+	v1.POST("/login", controller.LoginHandler)
+	// 应用jwt认证中间件
+
+	v1.Use(middlewares.JWTAuthMiddleware())
+
+	{
+		v1.GET("/community", controller.CommunityHandler)
+	}
 
 	return r
 }

@@ -23,9 +23,10 @@ import (
 // Go Web开发通用脚手架
 
 func main() {
+	fmt.Println(os.Args)
 	// 0. 获取命令行参数。第0个元素是可执行文件本身，传入的应该是后续的元素，这里规定第二个参数为配置文件
 	if len(os.Args) < 2 {
-		fmt.Println("need configuration file; eg: bluebell config.yaml")
+		fmt.Println("need configuration file; eg: dandelion config.yaml")
 		return
 	}
 
