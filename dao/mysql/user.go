@@ -5,19 +5,12 @@ import (
 	"crypto/md5"
 	"database/sql"
 	"encoding/hex"
-	"errors"
 )
 
 // DAO层 把每一步数据库的操作都封装成函数，等待LOGIC层按需求调用
 
 // 密钥
 const secret = "longwenzhang0"
-
-var (
-	ErrorUserExist       = errors.New("用户已存在")
-	ErrorUserNotExist    = errors.New("用户不存在")
-	ErrorInvalidPassword = errors.New("密码错误")
-)
 
 // CheckUserExist 查询指定用户名的用户是否存在
 func CheckUserExist(username string) (err error) {
