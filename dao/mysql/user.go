@@ -5,6 +5,8 @@ import (
 	"crypto/md5"
 	"database/sql"
 	"encoding/hex"
+
+	"go.uber.org/zap"
 )
 
 // DAO层 把每一步数据库的操作都封装成函数，等待LOGIC层按需求调用
@@ -62,6 +64,20 @@ func Login(user *models.User) (err error) {
 	password := encryptPassword(oPassword)
 	if password != user.Password {
 		return ErrorInvalidPassword
+	}
+	return
+}
+
+// GetUserByID 根据id获取用户信息
+func GetUserByID(uid int64) (user *models.User, err error) {
+	user = new(models.User)
+	sqlStr := `select user_id,username from user where user_id = ?`
+	err = db.Get(user, sqlStr, uid)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			zap.L().Error("GetUserByID/db.Get(user, sqlStr, uid) failed: ", zap.Error(err))
+		}
+		zap.L().Error("GetUserByID/db.Get(user, sqlStr, uid) failed: ", zap.Error(err))
 	}
 	return
 }
