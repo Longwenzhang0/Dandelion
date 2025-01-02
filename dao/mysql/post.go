@@ -20,7 +20,7 @@ func CreatePost(p *models.Post) (err error) {
 	return
 }
 
-// 根据post_id获取帖子详情
+// GetPostByID 根据post_id获取帖子详情
 func GetPostByID(pid int64) (post *models.Post, err error) {
 	post = new(models.Post)
 	sqlStr := `select 
@@ -37,4 +37,23 @@ func GetPostByID(pid int64) (post *models.Post, err error) {
 	}
 	return post, err
 
+}
+
+// 返回所有帖子的slice
+func GetPostList(page, size int64) (posts []*models.Post, err error) {
+	// 每次限制两条
+	sqlStr := `select
+	post_id,title,content,author_id,community_id,create_time 
+	from post limit ?,?
+	`
+	// limit两个参数，分别是偏移量和行数。填充时计算当前的偏移量为(page-1)*size，比如要取1页的10条，那起始位置就是0，offset为10
+	posts = make([]*models.Post, 0, 2)
+	err = db.Select(&posts, sqlStr, (page-1)*size, size)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			err = ErrorInvalidID
+			zap.L().Error("GetPostList/db.Select(&posts, sqlStr) failed: ", zap.Error(err))
+		}
+	}
+	return
 }

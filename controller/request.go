@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -28,4 +29,28 @@ func getCurrentUserID(c *gin.Context) (userID int64, err error) {
 		return
 	}
 	return
+}
+
+func getPageInfo(c *gin.Context) (int64, int64) {
+	// 获取分页参数
+	pageStr := c.Query("page")
+	sizeStr := c.Query("size")
+
+	var (
+		page int64 // 页码
+		size int64 // 每页条数
+		err  error
+	)
+
+	page, err = strconv.ParseInt(pageStr, 10, 64)
+	if err != nil {
+		zap.L().Error("GetPostListHandler/strconv.ParseInt(pageStr, 10, 64) failed: ", zap.Error(err))
+		page = 1 // 出错时，缺省为第1页
+	}
+	size, err = strconv.ParseInt(sizeStr, 10, 64)
+	if err != nil {
+		zap.L().Error("GetPostListHandler/strconv.ParseInt(sizeStr, 10, 64) failed: ", zap.Error(err))
+		size = 10 // 出错时，缺省为10条
+	}
+	return page, size
 }

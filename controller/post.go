@@ -37,7 +37,7 @@ func CreatePostHandler(c *gin.Context) {
 	ResponseSuccess(c, nil)
 }
 
-// GetPostDetail 通过id获取帖子详情
+// GetPostDetailHandler 通过id获取帖子详情
 func GetPostDetailHandler(c *gin.Context) {
 	// 1. 获取参数和参数校验，帖子id
 	pidStr := c.Param("id")
@@ -56,4 +56,20 @@ func GetPostDetailHandler(c *gin.Context) {
 	}
 	// 3. 返回响应
 	ResponseSuccess(c, data)
+}
+
+// GetPostListHandler 获取帖子列表的处理函数
+func GetPostListHandler(c *gin.Context) {
+	// 1. 获取参数和参数校验
+	page, size := getPageInfo(c)
+
+	data, err := logic.GetPostList(page, size)
+	if err != nil {
+		zap.L().Error("GetPostListHandler/logic.GetPostList() failed: ", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	// 2. 返回响应
+	ResponseSuccess(c, data)
+
 }

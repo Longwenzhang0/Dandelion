@@ -22,7 +22,7 @@ func CommunityHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
-// CommunityDetailHandler 查询所有的社区分类的详情
+// CommunityDetailHandler 查询指定id的社区分类的详情
 func CommunityDetailHandler(c *gin.Context) {
 	// 1. 获取社区id,restful传过来的
 	communityID := c.Param("id")
