@@ -10,7 +10,7 @@ type ResponseData struct {
 	// Msg和Data可能是多种类型，所以这里用泛型接收
 	Code ResCode     `json:"code"`
 	Msg  interface{} `json:"msg"`
-	Data interface{} `json:"data"`
+	Data interface{} `json:"data,omitempty"`
 }
 
 // ResponseError 根据code返回错误信息

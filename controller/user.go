@@ -6,6 +6,7 @@ import (
 	"Dandelion/models"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 
@@ -74,7 +75,7 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 	// 2. 业务逻辑处理
-	token, err := logic.Login(p)
+	user, err := logic.Login(p)
 	if err != nil {
 		zap.L().Error("logic.Login failed", zap.String("username:", p.Username), zap.Error(err))
 		if errors.Is(err, mysql.ErrorUserNotExist) {
@@ -86,5 +87,9 @@ func LoginHandler(c *gin.Context) {
 	}
 
 	// 3. 返回响应
-	ResponseSuccess(c, token)
+	ResponseSuccess(c, gin.H{
+		"user_id":   strconv.FormatInt(user.UserID, 10),
+		"user_name": user.Username,
+		"token":     user.Token,
+	})
 }
