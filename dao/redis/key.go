@@ -4,7 +4,12 @@ package redis
 
 const (
 	KeyPrefix              = "dandelion:"
-	KeyPostTime            = "post:time"  // zset;帖子及发帖时间
-	KeyPostScore           = "post:score" // zset;帖子及分数
+	KeyPostTimeZSet        = "post:time"  // zset;帖子及发帖时间
+	KeyPostScoreZSet       = "post:score" // zset;帖子及分数
 	KeyPostVotedZSetPrefix = "post:voted" // zset;（非完整key）记录用户及投票类型；参数为post id
 )
+
+// 给redis key加上前缀
+func getRedisKey(key string) string {
+	return KeyPrefix + key
+}

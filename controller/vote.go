@@ -25,8 +25,20 @@ func PostVoteController(c *gin.Context) {
 		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans))) // 翻译错误类型，去掉错误提示中的结构体标识
 		return
 	}
+	// 获取当前登录者id，即投票者
+	userID, err := getCurrentUserID(c)
+	if err != nil {
+		zap.L().Error("PostVoteController/getCurrentUserID(c) failed: ", zap.Error(err))
+		ResponseError(c, CodeNeedLogin)
+		return
+	}
+
 	// 业务处理
-	logic.PostVote()
+	if err = logic.VoteForPost(userID, p); err != nil {
+		zap.L().Error("PostVoteController/logic.VoteForPost(userID, p) failed: ", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
 
 	// 返回响应
 	ResponseSuccess(c, nil)

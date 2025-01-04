@@ -2,6 +2,7 @@ package logic
 
 import (
 	"Dandelion/dao/mysql"
+	"Dandelion/dao/redis"
 	"Dandelion/models"
 	"Dandelion/pkg/snowflake"
 	_ "Dandelion/pkg/snowflake"
@@ -13,9 +14,13 @@ import (
 func CreatePost(p *models.Post) (err error) {
 	// 1. 生成post id
 	p.ID = snowflake.GenID()
-
 	// 2. 保存到数据库
-	return mysql.CreatePost(p)
+	err = mysql.CreatePost(p)
+	if err != nil {
+		return err
+	}
+	err = redis.CreatePost(p.ID)
+	return
 }
 
 func GetPostByID(pid int64) (data *models.ApiPostDetail, err error) {
