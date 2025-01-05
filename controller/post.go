@@ -73,3 +73,30 @@ func GetPostListHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 
 }
+
+// GetPostListHandler2 升级版：获取帖子列表的处理函数，可根据前端传入参数动态获取:time or score
+func GetPostListHandler2(c *gin.Context) {
+	// 1. 获取参数和参数校验，例如GET posts/?page=1&size=1&order=time
+	p := &models.ParamPostList{
+		Page:  1,
+		Size:  10,
+		Order: models.OrderTime,
+	}
+	if err := c.ShouldBindQuery(p); err != nil {
+		zap.L().Error("GetPostListHandler2/c.ShouldBindQuery(p) failed: ", zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+	// 2. 去redis查询id列表
+	// 3. 根据id去mysql查询帖子的详细信息
+	// 以上两步都放在logic层处理
+	data, err := logic.GetPostList2(p)
+	if err != nil {
+		zap.L().Error("GetPostListHandler2/logic.GetPostList2(p) failed: ", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	// 4. 返回响应
+	ResponseSuccess(c, data)
+
+}

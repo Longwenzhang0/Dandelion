@@ -4,8 +4,8 @@ package redis
 
 const (
 	KeyPrefix              = "dandelion:"
-	KeyPostTimeZSet        = "post:time"  // zset;帖子及发帖时间
-	KeyPostScoreZSet       = "post:score" // zset;帖子及分数
+	KeyPostTimeZSet        = "post:time"  // zset;帖子id及发帖时间
+	KeyPostScoreZSet       = "post:score" // zset;帖子id及分数
 	KeyPostVotedZSetPrefix = "post:voted" // zset;（非完整key）记录用户及投票类型；参数为post id
 )
 
