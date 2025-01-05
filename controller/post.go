@@ -100,3 +100,31 @@ func GetPostListHandler2(c *gin.Context) {
 	ResponseSuccess(c, data)
 
 }
+
+// GetCommunityPostListHandler 根据社区去查询帖子列表
+func GetCommunityPostListHandler(c *gin.Context) {
+	// 1. 获取参数和参数校验，例如GET posts/?page=1&size=1&order=time
+	p := &models.ParamCommunityPostList{
+		ParamPostList: &models.ParamPostList{
+			Page:  1,
+			Size:  10,
+			Order: models.OrderTime,
+		},
+	}
+	if err := c.ShouldBindQuery(p); err != nil {
+		zap.L().Error("GetPostListHandler2/c.ShouldBindQuery(p) failed: ", zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+	// 2. 去redis查询id列表
+	// 3. 根据id去mysql查询帖子的详细信息
+	// 以上两步都放在logic层处理
+	data, err := logic.GetCommunityPostList(p)
+	if err != nil {
+		zap.L().Error("GetPostListHandler2/logic.GetPostList2(p) failed: ", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	// 4. 返回响应
+	ResponseSuccess(c, data)
+}
