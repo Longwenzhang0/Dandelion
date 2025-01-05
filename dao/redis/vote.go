@@ -33,6 +33,7 @@ const (
 
 var (
 	ErrorVoteTimeExpire = errors.New("投票时间已过")
+	ErrorVoteRepeated   = errors.New("不允许重复投票")
 )
 
 func CreatePost(postID int64) error {
@@ -75,7 +76,11 @@ func VoteForPost(userID, postID string, direction float64) error {
 
 	// 查询当前用户给当前帖子之前的投票记录
 	oldDirection := client.ZScore(getRedisKey(KeyPostVotedZSetPrefix+postID), userID).Val()
-	// 判断是加分还是减分，diff为投票数的绝对值，将多个分支转换成一个公式
+	// 判断是加分还是减分，diff为投票数的绝对值，将多个分支转换成一个公式，在分数上已经可以保证两次的动作不重复了；如果两次重复，则diff=0，分数最终不会变化；但需要返回报错
+	// 如果两次一致，则返回报错：不允许重复投票
+	if direction == oldDirection {
+		return ErrorVoteRepeated
+	}
 	var operator float64
 	if direction > oldDirection {
 		operator = 1

@@ -108,8 +108,16 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetail, err er
 	}
 	// 初始化data，根据帖子数量来决定data的大小
 	data = make([]*models.ApiPostDetail, 0, len(posts))
+
+	// 提前查询每篇帖子的投票数量，跟帖子数量是一一对应的，直接填充即可。
+	voteData, err := redis.GetPostVoteData(ids)
+	if err != nil {
+		zap.L().Error("GetPostList2/redis.GetPostVoteData(ids) failed: ", zap.Error(err))
+		return
+	}
+
 	// 遍历帖子中的用户信息和社区信息
-	for _, post := range posts {
+	for idx, post := range posts {
 		// 根据帖子信息中的AuthorID查询用户信息
 		user, err := mysql.GetUserByID(post.AuthorID)
 		if err != nil {
@@ -124,6 +132,7 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetail, err er
 		}
 		postDetail := &models.ApiPostDetail{
 			AuthorName:      user.Username,
+			VoteNum:         voteData[idx],
 			Post:            post,
 			CommunityDetail: communityDetail,
 		}
