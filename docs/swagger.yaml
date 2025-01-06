@@ -1,0 +1,263 @@
+basePath: http://localhost:8082/api/v1/
+definitions:
+  models.ApiPostDetail:
+    properties:
+      author_name:
+        type: string
+      community_detail:
+        $ref: '#/definitions/models.CommunityDetail'
+      community_post:
+        $ref: '#/definitions/models.Post'
+      vote_num:
+        type: integer
+    type: object
+  models.Community:
+    properties:
+      id:
+        description: 社区ID
+        type: integer
+      name:
+        description: 社区名称
+        type: string
+    type: object
+  models.CommunityDetail:
+    properties:
+      create_time:
+        description: 社区创建时间
+        type: string
+      id:
+        description: 社区id
+        example: "0"
+        type: string
+      introduction:
+        description: 社区简介，可省略
+        type: string
+      name:
+        description: 社区名称
+        type: string
+    type: object
+  models.Post:
+    properties:
+      author_id:
+        type: integer
+      community_id:
+        type: integer
+      content:
+        type: string
+      create_time:
+        type: string
+      id:
+        type: integer
+      status:
+        type: integer
+      title:
+        type: string
+    required:
+    - community_id
+    - content
+    - title
+    type: object
+info:
+  contact:
+    email: 13452131581@sina.cn
+    name: ChenJie
+  description: 基于gin框架的论坛项目
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Dandelion论坛项目
+  version: "1.0"
+paths:
+  /community:
+    get:
+      consumes:
+      - application/json
+      description: 可以返回所有的社区id和对应的社区name
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "1000":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Community'
+      security:
+      - ApiKeyAuth: []
+      summary: 查询所有的社区id和对应的社区name
+      tags:
+      - 社区相关接口
+  /community/:id:
+    get:
+      consumes:
+      - application/json
+      description: 查询指定id的社区分类的详情
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "1000":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.CommunityDetail'
+      security:
+      - ApiKeyAuth: []
+      summary: 查询指定id的社区分类的详情
+      tags:
+      - 社区相关接口
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: 登录handler
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 登录handler
+      tags:
+      - 用户相关接口
+  /post:
+    post:
+      consumes:
+      - application/json
+      description: 创建帖子
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 创建帖子
+      tags:
+      - 帖子相关接口
+  /post/:id:
+    get:
+      consumes:
+      - application/json
+      description: 通过id获取帖子详情
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ApiPostDetail'
+      security:
+      - ApiKeyAuth: []
+      summary: 通过id获取帖子详情
+      tags:
+      - 帖子相关接口
+  /posts/:
+    get:
+      consumes:
+      - application/json
+      description: 分页获取帖子列表的处理函数（mysql）
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ApiPostDetail'
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取帖子列表的处理函数（mysql）
+      tags:
+      - 帖子相关接口
+  /posts2/:
+    get:
+      consumes:
+      - application/json
+      description: 可根据前端传入参数动态获取:time or score，
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ApiPostDetail'
+      security:
+      - ApiKeyAuth: []
+      summary: 可根据前端传入参数动态获取:time or score
+      tags:
+      - 帖子相关接口
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: 注册handler
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 注册handler
+      tags:
+      - 用户相关接口
+  /vote:
+    post:
+      consumes:
+      - application/json
+      description: 分页获取帖子列表的处理函数（mysql），给指定帖子投票
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 给指定帖子投票接口，获取当前登录者id，
+      tags:
+      - 投票相关接口
+swagger: "2.0"

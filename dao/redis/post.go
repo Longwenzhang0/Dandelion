@@ -52,7 +52,7 @@ func GetPostVoteData(ids []string) (data []int64, err error) {
 }
 
 // GetCommunityPostIDsInOrder 按照社区，从redis中查找符合规则的post id，降序
-func GetCommunityPostIDsInOrder(p *models.ParamCommunityPostList) ([]string, error) {
+func GetCommunityPostIDsInOrder(p *models.ParamPostList) ([]string, error) {
 	// 根据请求的排序参数来指定redis key
 	orderKey := getRedisKey(KeyPostTimeZSet)
 	if p.Order == models.OrderScore {

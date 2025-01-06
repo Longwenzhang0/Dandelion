@@ -17,7 +17,16 @@ import (
 
 // controller层： 参数校验
 
-// SignUpHandler 注册handler
+// SignUpHandler 注册接口
+// @Summary 注册handler
+// @Description 注册handler
+// @Tags 用户相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200
+// @Router /signup [post]
 func SignUpHandler(c *gin.Context) {
 	// 1. 获取参数，参数校验
 	p := new(models.ParamSignUp)
@@ -57,7 +66,16 @@ func SignUpHandler(c *gin.Context) {
 	ResponseSuccess(c, nil)
 }
 
-// LoginHandler 登录handler
+// LoginHandler 登录接口
+// @Summary 登录handler
+// @Description 登录handler
+// @Tags 用户相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200
+// @Router /login [post]
 func LoginHandler(c *gin.Context) {
 	// 1. 获取参数，参数校验
 	p := new(models.ParamLogin)

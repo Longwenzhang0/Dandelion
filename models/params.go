@@ -29,13 +29,8 @@ type ParamVoteData struct {
 
 // ParamPostList 获取帖子列表query string参数
 type ParamPostList struct {
-	Page  int64  `json:"page" form:"page"`
-	Size  int64  `json:"size" form:"size"`
-	Order string `json:"order" form:"order"`
-}
-
-// ParamCommunityPostList 获取帖子列表query string参数，相比上面的结构体，新增CommunityID字段
-type ParamCommunityPostList struct {
-	*ParamPostList
-	CommunityID int64 `json:"community_id" form:"community_id"`
+	CommunityID int64  `json:"community_id" form:"community_id"` // 可以为空
+	Page        int64  `json:"page" form:"page"`
+	Size        int64  `json:"size" form:"size"`
+	Order       string `json:"order" form:"order"`
 }

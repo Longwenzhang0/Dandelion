@@ -1,5 +1,19 @@
 package main
 
+// @title Dandelion论坛项目
+// @version 1.0
+// @description 基于gin框架的论坛项目
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name ChenJie
+// @contact.url
+// @contact.email 13452131581@sina.cn
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @BasePath http://localhost:8082/api/v1/
+
 import (
 	"Dandelion/controller"
 	"Dandelion/dao/mysql"
@@ -19,8 +33,6 @@ import (
 
 	"go.uber.org/zap"
 )
-
-// Go Web开发通用脚手架
 
 func main() {
 	fmt.Println(os.Args)

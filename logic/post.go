@@ -142,7 +142,7 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetail, err er
 	return
 }
 
-func GetCommunityPostList(p *models.ParamCommunityPostList) (data []*models.ApiPostDetail, err error) {
+func GetCommunityPostList(p *models.ParamPostList) (data []*models.ApiPostDetail, err error) {
 
 	// 2. 去redis查询id列表
 	ids, err := redis.GetCommunityPostIDsInOrder(p)
@@ -191,6 +191,23 @@ func GetCommunityPostList(p *models.ParamCommunityPostList) (data []*models.ApiP
 			CommunityDetail: communityDetail,
 		}
 		data = append(data, postDetail)
+	}
+	return
+}
+
+// GetPostListSummary 根据p中是否存在community id来做分支，整合上面两个函数
+func GetPostListSummary(p *models.ParamPostList) (data []*models.ApiPostDetail, err error) {
+	if p.CommunityID == 0 {
+		// 没有社区id，则查询所有的帖子信息
+		data, err = GetPostList2(p)
+	} else {
+		// 有社区id，按照社区id来查询
+		data, err = GetCommunityPostList(p)
+	}
+
+	if err != nil {
+		zap.L().Error("GetPostListSummary failed", zap.Error(err))
+		return nil, err
 	}
 	return
 }

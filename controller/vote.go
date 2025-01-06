@@ -10,8 +10,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 投票功能
-
+// PostVoteController 给指定帖子投票接口
+// @Summary 给指定帖子投票接口，获取当前登录者id，
+// @Description 分页获取帖子列表的处理函数（mysql），给指定帖子投票
+// @Tags 投票相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200
+// @Router /vote [post]
 func PostVoteController(c *gin.Context) {
 	// 获取参数和参数校验
 	p := new(models.ParamVoteData)

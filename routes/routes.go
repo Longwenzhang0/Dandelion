@@ -7,6 +7,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	_ "Dandelion/docs" // 千万不要忘了导入把你上一步生成的docs
+
+	swaggerFiles "github.com/swaggo/files"
+	gs "github.com/swaggo/gin-swagger"
 )
 
 func SetupRouter(mode string) *gin.Engine {
@@ -14,6 +19,7 @@ func SetupRouter(mode string) *gin.Engine {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	r := gin.New()
+	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
 	v1 := r.Group("/api/v1")

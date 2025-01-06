@@ -26,6 +26,11 @@ var codeMsgMap = map[ResCode]string{
 	CodeInvalidToken: "无效的token",
 }
 
+// Msg 返回错误码对应的错误信息
+// @Summary 返回错误码对应的错误信息
+// @Description 错误码可以直接调用该方法，返回该方法对应的错误信息
+// @Tags 错误码相关接口
+// @Security ApiKeyAuth
 func (c ResCode) Msg() string {
 	msg, ok := codeMsgMap[c]
 	if !ok {

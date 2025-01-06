@@ -14,6 +14,14 @@ type ResponseData struct {
 }
 
 // ResponseError 根据code返回错误信息
+// @Summary 根据code返回错误信息
+// @Description 根据code返回错误信息
+// @Tags 错误码相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200
 func ResponseError(c *gin.Context, code ResCode) {
 	rd := &ResponseData{
 		Code: code,
@@ -24,6 +32,14 @@ func ResponseError(c *gin.Context, code ResCode) {
 }
 
 // ResponseErrorWithMsg 根据code和msg返回错误信息
+// @Summary 根据code和msg返回错误信息
+// @Description 根据code和msg返回错误信息
+// @Tags 错误码相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200
 func ResponseErrorWithMsg(c *gin.Context, code ResCode, msg interface{}) {
 
 	rd := &ResponseData{
@@ -35,6 +51,14 @@ func ResponseErrorWithMsg(c *gin.Context, code ResCode, msg interface{}) {
 }
 
 // ResponseSuccess 返回成功响应
+// @Summary 返回成功响应
+// @Description 返回成功响应
+// @Tags 错误码相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200
 func ResponseSuccess(c *gin.Context, data interface{}) {
 
 	rd := &ResponseData{
