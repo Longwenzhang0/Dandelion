@@ -12,7 +12,8 @@ package main
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @BasePath http://localhost:8082/api/v1/
+// @host 127.0.0.1:8082
+// @BasePath /api/v1/
 
 import (
 	"Dandelion/controller"

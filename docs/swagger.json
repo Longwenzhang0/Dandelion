@@ -14,7 +14,8 @@
         },
         "version": "1.0"
     },
-    "basePath": "http://localhost:8082/api/v1/",
+    "host": "127.0.0.1:8082",
+    "basePath": "/api/v1/",
     "paths": {
         "/community": {
             "get": {

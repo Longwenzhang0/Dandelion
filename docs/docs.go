@@ -427,8 +427,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "",
-	BasePath:         "http://localhost:8082/api/v1/",
+	Host:             "127.0.0.1:8082",
+	BasePath:         "/api/v1/",
 	Schemes:          []string{},
 	Title:            "Dandelion论坛项目",
 	Description:      "基于gin框架的论坛项目",

@@ -1,4 +1,4 @@
-basePath: http://localhost:8082/api/v1/
+basePath: /api/v1/
 definitions:
   models.ApiPostDetail:
     properties:
@@ -57,6 +57,7 @@ definitions:
     - content
     - title
     type: object
+host: 127.0.0.1:8082
 info:
   contact:
     email: 13452131581@sina.cn
