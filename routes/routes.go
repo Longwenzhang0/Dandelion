@@ -5,6 +5,7 @@ import (
 	"Dandelion/logger"
 	"Dandelion/middlewares"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -20,7 +21,12 @@ func SetupRouter(mode string) *gin.Engine {
 	}
 	r := gin.New()
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
-	r.Use(logger.GinLogger(), logger.GinRecovery(true))
+	// 限流中间件，每2s放入一个令牌
+	r.Use(logger.GinLogger(), logger.GinRecovery(true), middlewares.RateLimitMiddleware(2*time.Second, 1))
+
+	r.GET("/ping", func(c *gin.Context) {
+		c.String(http.StatusOK, "pong")
+	})
 
 	v1 := r.Group("/api/v1")
 

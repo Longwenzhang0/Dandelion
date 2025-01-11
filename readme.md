@@ -45,3 +45,14 @@
 #### 4. 分页获取帖子信息，并且可以按照发布时间或者帖子分数排序
 ![img_5.png](docs/img_5.png)
 
+### 使用go-wrk进行压力测试
+#### 指定8个线程，100个最大连接，1000个请求总数
+![img_6.png](docs%2Fimg_6.png)
+
+### 使用juju/ratelimit中的令牌桶算法实现限流策略
+#### middlewares.RateLimitMiddleware(2*time.Second, 1))，为测试直观，2s放入一个令牌，令牌桶最大容量为1
+- 慢速请求时，未被限流，返回响应"pong"\
+     ![img_7.png](docs%2Fimg_7.png)
+- 快速请求时，限流生效，返回响应"rate limit"\
+ ![img_8.png](docs%2Fimg_8.png)
+
